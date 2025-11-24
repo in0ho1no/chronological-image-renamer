@@ -1,3 +1,11 @@
+[project]
+name = "convert-with-rename-image"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
 [tool.ruff]
 # 1行の最大文字数
 line-length = 150
