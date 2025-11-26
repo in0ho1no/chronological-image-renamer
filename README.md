@@ -10,9 +10,13 @@
 
 ### パッケージ追加
 
-パッケージを追加する場合は以下
+以下パッケージを追加する
 
     uv add Pillow pillow-heif
+
+テスト環境用は以下
+
+    uv add pytest pytest-mock
 
 ### パッケージ削除
 
