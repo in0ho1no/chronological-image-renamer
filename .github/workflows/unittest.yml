@@ -1,0 +1,32 @@
+name: UnitTest
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    # uvのセットアップ (公式アクションを使用)
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        enable-cache: true
+
+    # Pythonのセットアップ
+    - name: Set up Python
+      run: uv python install 3.12
+
+    # 依存関係のインストール
+    - name: Install dependencies
+      run: uv sync
+
+    # テストの実行
+    - name: Run tests
+      run: uv run pytest
