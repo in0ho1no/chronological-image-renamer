@@ -88,3 +88,9 @@ ignore_missing_imports = true
 exclude = [
     "docs/source/conf\\.py$", # . はエスケープ
 ]
+
+[tool.pytest.ini_options]
+# Pytestの設定
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-ra -q"
