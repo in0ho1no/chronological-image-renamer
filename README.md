@@ -1,3 +1,5 @@
+![AI Generated](https://img.shields.io/badge/AI-Generated-10B981?style=flat-square&logo=googlebard&logoColor=white)
+
 # Step of create work enviromental
 
 ## UVによる環境作成
