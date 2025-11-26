@@ -91,6 +91,6 @@ exclude = [
 
 [tool.pytest.ini_options]
 # Pytestの設定
-testpaths = ["tests"]
+testpaths = ["src/tests"]
 python_files = ["test_*.py"]
 addopts = "-ra -q"
