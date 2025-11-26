@@ -1,4 +1,5 @@
 ![AI Generated](https://img.shields.io/badge/AI-Generated-10B981?style=flat-square&logo=googlebard&logoColor=white)
+![Tests](https://github.com/in0ho1no/chronological-image-renamer/actions/workflows/unittest.yml/badge.svg)
 
 # Step of create work enviromental
 
