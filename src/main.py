@@ -10,8 +10,8 @@ register_heif_opener()
 
 
 class ImageFile:
-    """
-    個々の画像ファイルを表現するクラス。
+    """個々の画像ファイルを表現するクラス
+
     EXIF情報の取得、比較、変換保存の責務を持つ。
     """
 
@@ -23,21 +23,36 @@ class ImageFile:
     )
     DATE_FORMAT = '%Y:%m:%d %H:%M:%S'
 
-    def __init__(self, path: Path):
+    def __init__(self, path: Path) -> None:
+        """初期化
+
+        Args:
+            path (Path): 画像ファイルのパス
+        """
         self.path: Path = path
         self._date_taken: datetime | None = None
         self._date_source: str = ''
 
     @property
     def date_taken(self) -> datetime:
-        """撮影日時を返す"""
+        """撮影日時を返す
+
+        Returns:
+            datetime: 撮影日時。取得できない場合は更新日時。
+        """
         if self._date_taken is None:
             self._parse_date()
-        return self._date_taken  # type: ignore
+        # _parse_date実行後は必ず値が入るロジックだが、Mypyのためにassertする
+        assert self._date_taken is not None
+        return self._date_taken
 
     @property
     def source_info(self) -> str:
-        """日付の取得元情報を返す"""
+        """日付の取得元情報を返す
+
+        Returns:
+            str: 'EXIF' または 'FileTimestamp'
+        """
         if not self._date_source:
             self._parse_date()
         return self._date_source
@@ -66,7 +81,11 @@ class ImageFile:
         self._date_source = 'FileTimestamp'
 
     def export(self, output_path: Path) -> None:
-        """ファイルを指定のパスに変換/コピーして保存する"""
+        """ファイルを指定のパスに変換/コピーして保存する
+
+        Args:
+            output_path (Path): 出力先のパス
+        """
         suffix = self.path.suffix.lower()
 
         try:
@@ -82,7 +101,11 @@ class ImageFile:
             print(f'Error: {self.path.name} -> {e}')
 
     def _convert_heic_to_jpg(self, output_path: Path) -> None:
-        """HEICをJPGに変換して保存"""
+        """HEICをJPGに変換して保存
+
+        Args:
+            output_path (Path): 保存先のパス
+        """
         with Image.open(self.path) as img:
             exif_bytes = img.info.get('exif')
             rgb_img = img.convert('RGB')
@@ -93,12 +116,14 @@ class ImageFile:
 
             rgb_img.save(output_path, 'JPEG', **save_kwargs)
 
-    def __lt__(self, other: 'ImageFile') -> bool:
-        """
-        ソート用のマジックメソッド (<)。
-        1. 撮影日時
-        2. ファイル名(日時が同じ場合のタイブレーカー)
-        の順で比較する。
+    def __lt__(self, other: object) -> bool:
+        """ソート用のマジックメソッド (<)
+
+        Args:
+            other (object): 比較対象
+
+        Returns:
+            bool: selfの方が日時が古い(または名前が若い)場合にTrue
         """
         if not isinstance(other, ImageFile):
             return NotImplemented
@@ -108,13 +133,17 @@ class ImageFile:
 
 
 class BatchRenamer:
-    """
-    ディレクトリ単位での画像処理フローを管理するクラス。
-    """
+    """ディレクトリ単位での画像処理フローを管理するクラス"""
 
     TARGET_EXTS = ('.jpg', '.jpeg', '.heic')
 
-    def __init__(self, input_dir: str, output_dirname: str = 'converted'):
+    def __init__(self, input_dir: str, output_dirname: str = 'converted') -> None:
+        """初期化
+
+        Args:
+            input_dir (str): 入力ディレクトリのパス
+            output_dirname (str): 出力ディレクトリ名. Defaults to 'converted'.
+        """
         self.input_dir = Path(input_dir)
         self.output_dir = self.input_dir / output_dirname
 
@@ -153,7 +182,11 @@ class BatchRenamer:
         print('\n処理が完了しました。')
 
     def _collect_images(self) -> list[ImageFile]:
-        """対象拡張子のファイルを検索し、ImageFileオブジェクトのリストを返す"""
+        """対象拡張子のファイルを検索し、ImageFileオブジェクトのリストを返す
+
+        Returns:
+            list[ImageFile]: 画像オブジェクトのリスト
+        """
         return [ImageFile(p) for p in self.input_dir.iterdir() if p.is_file() and p.suffix.lower() in self.TARGET_EXTS]
 
     def _prepare_output_dir(self) -> None:

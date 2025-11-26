@@ -13,7 +13,7 @@ dependencies = [
 # 1行の最大文字数
 line-length = 150
 # 対応するPythonバージョンを指定し、バージョンに応じたLint/Formatを可能にする
-target-version = "py311"
+target-version = "py312"
 # Lint/Formatの対象から除外するファイル/ディレクトリ
 exclude = [
     ".git",
